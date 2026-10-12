@@ -6,8 +6,7 @@ from rest_framework.decorators import api_view
 from .filters import filter_posts
 from django.db.models import Count, Sum, Avg, Max, Min
 from datetime import timedelta
-from django.utils import timezone
-from drf_yasg.views import swagger_auto_schema
+from django.utils import timezone,swagger_auto_schema
 
 @swagger_auto_schema(
     method='get',
