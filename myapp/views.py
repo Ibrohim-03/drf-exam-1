@@ -226,6 +226,28 @@ def like_set(request,id):
 
 
 
+@api_view(['GET','PUT','DELETE'])
+def favorite_set(request,id):
+    try:
+        favorite = Favorite.objects.get(pk=id)
+    except Favorite.DoesNotExist:
+        return Response({'error':'Not found'},status=404)
+    if request.method=='GET':
+        serializer = FavoriteSerializer(favorite)
+        return Response(serializer.data)
+    if request.method == 'PUT':
+        serializer = FavoriteSerializer(favorite,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,status=400)
+    if request.method=='DELETE':
+        favorite.delete()
+        return Response(status=204)
+
+
+
+
 
 
 
