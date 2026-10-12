@@ -48,4 +48,40 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 
+class LikeSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only = True)
+    user_id = serializers.PrimaryKeyRelatedField(
+        queryset = User.objects.all(),
+        source = 'user',
+        write_only = True
+    )
+    post = PostSerializer(read_only = True)
+    post_id = serializers.PrimaryKeyRelatedField(
+        queryset = Post.objects.all(),
+        source = 'post',
+        write_only = True
+    )
+    class Meta:
+        model = Like
+        fields = ['user','user_id','post','post_id','cr_at']
+
+
+
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only = True)
+    user_id = serializers.PrimaryKeyRelatedField(
+        queryset = User.objects.all(),
+        source = 'user',
+        write_only = True
+    )
+    post = PostSerializer(read_only = True)
+    post_id = serializers.PrimaryKeyRelatedField(
+        queryset = Post.objects.all(),
+        source = 'post',
+        write_only = True
+    )
+    class Meta:
+        model = Favorite
+        fields = ['user','user_id','post','post_id','cr_at']
 

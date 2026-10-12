@@ -108,6 +108,40 @@ def post_list(request):
 
 
 
+@api_view(['GET','POST'])
+def like_list(request):
+    if request.method == 'GET':
+        like = Like.objects.all()
+        serializer = LikeSerializer(like,many=True)
+        return Response(serializer.data)
+    if request.method=='POST':
+        serializer = LikeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=201)
+        return Response(serializer.errors,status=400)
+
+    
+
+
+
+
+@api_view(['GET','POST'])
+def favorite_list(request):
+    if request.method == 'GET':
+        favorite = Favorite.objects.all()
+        serializer = FavoriteSerializer(favorite,many=True)
+        return Response(serializer.data)
+    if request.method=='POST':
+        serializer = FavoriteSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=201)
+        return Response(serializer.errors,status=400)
+
+
+
+
 
 
 
