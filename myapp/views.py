@@ -68,6 +68,46 @@ def user_list(request):
 
 
 
+@api_view(['GET','POST'])
+def profile_list(request):
+    if request.method == 'GET':
+        profile = Profile.objects.all()
+        serializer = ProfileSerializer(profile,many=True)
+        return Response(serializer.data)
+    if request.method=='POST':
+        serializer = ProfileSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=201)
+        return Response(serializer.errors,status=400)
+
+
+
+
+
+
+@api_view(['GET','POST'])
+def post_list(request):
+    if request.method == 'GET':
+        post = Post.objects.annotate(
+            likes_count=Count('like'),
+            favorite_count=Count('favorite')
+
+        )
+        post = filter_posts(post,request.GET)
+        serializer = PostSerializer(post,many=True)
+        return Response(serializer.data)
+    if request.method=='POST':
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=201)
+        return Response(serializer.errors,status=400)
+
+
+
+
+
 
 
 
