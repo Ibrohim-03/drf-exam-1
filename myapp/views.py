@@ -142,6 +142,27 @@ def favorite_list(request):
 
 
 
+@api_view(['GET','PUT','DELETE'])
+def user_set(request,id):
+    try:
+        user = User.objects.get(pk=id)
+    except User.DoesNotExist:
+        return Response({'error':'Not found'},status=404)
+    if request.method=='GET':
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+    if request.method == 'PUT':
+        serializer = UserSerializer(user,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,status=400)
+    if request.method=='DELETE':
+        user.delete()
+        return Response(status=204)
+
+
+
 
 
 
