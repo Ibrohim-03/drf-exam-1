@@ -10,6 +10,8 @@ urlpatterns = [
     path('profiles/<int:id>/'),
     path('posts/',post_list),
     path('posts/<int:id>/',post_set),
-
-
+    path('likes/',like_list),
+    path('likes/<int:id>/',like_set),
+    path('favorites/',favorite_list),
+    path('favorites/<int:id>/',favorite_set),
 ]
