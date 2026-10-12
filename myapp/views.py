@@ -164,6 +164,28 @@ def user_set(request,id):
 
 
 
+@api_view(['GET','PUT','DELETE'])
+def profile_set(request,id):
+    try:
+        profile = Profile.objects.get(pk=id)
+    except Profile.DoesNotExist:
+        return Response({'error':'Not found'},status=404)
+    if request.method=='GET':
+        serializer = ProfileSerializer(profile)
+        return Response(serializer.data)
+    if request.method == 'PUT':
+        serializer = ProfileSerializer(profile,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,status=400)
+    if request.method=='DELETE':
+        profile.delete()
+        return Response(status=204)
+
+
+
+
 
 
 
