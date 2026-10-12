@@ -209,6 +209,23 @@ def post_set(request,id):
 
 
 
+@api_view(['GET','DELETE'])
+def like_set(request,id):
+    try:
+        like = Like.objects.get(pk=id)
+    except Like.DoesNotExist:
+        return Response({'error':'Not found'},status=404)
+    if request.method=='GET':
+        serializer = LikeSerializer(like)
+        return Response(serializer.data)
+    if request.method=='DELETE':
+        like.delete()
+        return Response(status=204)
+
+
+
+
+
 
 
 
