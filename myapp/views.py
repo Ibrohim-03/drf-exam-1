@@ -186,6 +186,29 @@ def profile_set(request,id):
 
 
 
+@api_view(['GET','PUT','DELETE'])
+def post_set(request,id):
+    try:
+        post = Post.objects.get(pk=id)
+    except Post.DoesNotExist:
+        return Response({'error':'Not found'},status=404)
+    if request.method=='GET':
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
+    if request.method == 'PUT':
+        serializer = PostSerializer(post,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,status=400)
+    if request.method=='DELETE':
+        post.delete()
+        return Response(status=204)
+
+
+
+
+
 
 
 
