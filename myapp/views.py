@@ -9,6 +9,43 @@ from datetime import timedelta
 from django.utils import timezone
 
 
+@api_view(['GET'])
+def user_statistics(request):
+    data = User.objects.aggregate(
+        total_users=Count('id'),
+        average_age=Avg('age'),
+        min_age=Min('age'),
+        max_age=Max('age')
+    )
+    return Response(data)
+
+
+@api_view(['GET'])
+def popular_posts(request):
+    posts = Post.objects.annotate(
+        likes_count=Count('like', distinct=True),
+        favorites_count=Count('favorite', distinct=True)
+    ).filter(
+        likes_count__gte=10
+    ).order_by('-likes_count')
+
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def post_statistics(request):
+    data = Post.objects.aggregate(
+        posts_count=Count('id'),
+        total_views=Sum('views'),
+        average_views=Avg('views'),
+        max_views=Max('views'),
+        min_views=Min('views'),
+        total_likes=Count('like', distinct=True),
+        total_favorites=Count('favorite', distinct=True)
+    )
+    return Response(data)
+
+
 
 @api_view(['GET','POST'])
 def user_list(request):
